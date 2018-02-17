@@ -1,2 +1,35 @@
 ---
 # tasks file for server
+ 
+- name: Update apt cache
+  apt: update_cache=yes cache_valid_time=3600
+  sudo: yes
+ 
+- name: Install required software
+  apt: name={{ item }} state=present
+  sudo: yes
+  with_items:
+    - libcurl3
+    - libmcrypt4
+    - libxmlrpc-epi0
+    - libmemcached11
+    - libmhash2
+    - mcrypt
+    - libmcrypt-dev
+    - psmisc
+ 
+- name: Update apt
+  raw: apt-get update
+ 
+- name: Install packages
+  sudo: yes
+  apt: pkg={{ item }} state=present
+  with_items:
+    - vim
+ 
+- name: Delete nginx configuration
+  raw : rm /etc/nginx/conf.d/default
+ 
+- name: Copy nginx configuration for wordpress
+  template: src=default.conf dest=/etc/nginx/conf.d/default
+  notify: restart nginx
