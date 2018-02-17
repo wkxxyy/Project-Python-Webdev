@@ -20,4 +20,5 @@
 		cd /usr/bin/
 		ln -s pip3 pip
 		ln -s python3 python
-- dd
+- [Refer](https://thecustomizewindows.com/2016/06/ansible-ubuntu-16-04-1-click-install-wordpress-nginx-playbook-tutorial/)
+- [Refer to Docker](https://docs.docker.com/get-started/part2/)
