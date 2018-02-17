@@ -4,6 +4,9 @@
 - name: Update apt cache
   apt: update_cache=yes cache_valid_time=3600
   sudo: yes
+
+- name: Update apt
+  raw: apt-get update
  
 - name: Install required software
   apt: name={{ item }} state=present
@@ -17,19 +20,15 @@
     - mcrypt
     - libmcrypt-dev
     - psmisc
- 
-- name: Update apt
-  raw: apt-get update
- 
+
 - name: Install packages
   sudo: yes
   apt: pkg={{ item }} state=present
   with_items:
     - vim
+    - nginx
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common 
  
-- name: Delete nginx configuration
-  raw : rm /etc/nginx/conf.d/default
- 
-- name: Copy nginx configuration for wordpress
-  template: src=default.conf dest=/etc/nginx/conf.d/default
-  notify: restart nginx
