@@ -1,0 +1,5 @@
+- hosts: helloworld
+
+  roles:
+    - server
+    - install
