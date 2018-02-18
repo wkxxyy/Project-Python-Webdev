@@ -22,3 +22,15 @@
 		ln -s python3 python
 - [Refer](https://thecustomizewindows.com/2016/06/ansible-ubuntu-16-04-1-click-install-wordpress-nginx-playbook-tutorial/)
 - [Refer to Docker](https://docs.docker.com/get-started/part2/)
+
+## Nginx
+- Hosts
+
+		cat /private/etc/hosts
+		
+		127.0.0.1	localhost
+		255.255.255.255	broadcasthost
+		::1             localhost
+		
+		192.168.206.170	test170.wenwtest.com
+		192.168.206.171	test171.wenwtest.com

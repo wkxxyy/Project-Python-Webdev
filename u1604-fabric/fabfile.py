@@ -29,8 +29,9 @@ def install_requirements_u1604():
         with cd('/etc/apt'):
             put('./sources.list', './', use_sudo=True)
     sudo('apt-get update')
-    sudo('apt-get install -y python python-dev python-pip')
-    sudo('apt-get install -y python-virtualenv')
+    sudo('apt-get install -y python-minimal python-dev python-pip')
+    sudo('apt-get install -y python3 python3-dev python3-pip')
+    sudo('pip install virtualenv')
     sudo('apt-get install -y nginx')
     sudo('apt-get install -y supervisor')
     sudo('apt-get install -y git')
@@ -45,7 +46,7 @@ def install_requirements_u1604():
     sudo('chown -R {}:{} {}'.format(env.user, env.user, remote_website_dir))
     with lcd(local_app_dir):
         with cd(remote_website_dir):
-            run('virtualenv env')
+            run('virtualenv -p python{} env'.format(env.python_ver))
             run('mkdir -p logs')
             #put('mysite/demo.sqlite3', 'mysite/production.sqlite3')
 
@@ -90,6 +91,7 @@ def configure_nginx():
         confStr = open('{}/nginx.conf'.format(local_config_dir)).read()
         confStr = confStr.replace("{remote_website_dir}", remote_website_dir)
         confStr = confStr.replace("{gunicorn_port}", env.gunicorn_port)
+        confStr = confStr.replace("{domain}", env.domain)
         open('{}/.nginx.conf.tmp'.format(local_config_dir), "w").write(confStr)
         with cd(remote_nginx_avail_dir):
             put('./.nginx.conf.tmp', './{}'.format(project_name), use_sudo=True)
