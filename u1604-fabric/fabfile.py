@@ -41,7 +41,7 @@ def install_requirements_u1604():
 
     sudo('rm -rf {}'.format(remote_website_dir))
     sudo('mkdir -p "{}"'.format(remote_app_dir))
-    sudo('chown -R 777 {}'.format(remote_app_dir))
+    sudo('chmod -R 777 {}'.format(remote_app_dir))
     sudo('mkdir -p "{}"'.format(remote_website_dir))
     sudo('chown -R {}:{} {}'.format(env.user, env.user, remote_website_dir))
     with cd(remote_website_dir):
