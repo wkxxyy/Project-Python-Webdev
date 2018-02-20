@@ -58,7 +58,7 @@ def copy_project_dir():
             run(r'cd src/mysite && rm -rf static '
                 '&& python manage.py collectstatic '
                 '&& cd -')
-        run(r'cd src && python manage.py prepare_theme && cd -')
+        #run(r'cd src && python manage.py prepare_theme && cd -')
         run(r'cp src/mysite/demo.sqlite3 src/mysite/production.sqlite3')
 
 def recover_sqlite_db():
