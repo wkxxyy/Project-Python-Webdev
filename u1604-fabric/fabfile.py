@@ -39,16 +39,14 @@ def install_requirements_u1604():
     sudo('apt-get install -y libffi-dev')
     sudo('apt-get install -y libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev')
 
-    sudo('rm -rf {}/env'.format(remote_website_dir))
+    sudo('rm -rf {}'.format(remote_website_dir))
     sudo('mkdir -p "{}"'.format(remote_app_dir))
-    sudo('chown -R {}:{} {}'.format(env.user, env.user, remote_app_dir))
+    sudo('chown -R 777 {}'.format(remote_app_dir))
     sudo('mkdir -p "{}"'.format(remote_website_dir))
     sudo('chown -R {}:{} {}'.format(env.user, env.user, remote_website_dir))
-    with lcd(local_app_dir):
-        with cd(remote_website_dir):
-            run('virtualenv -p python{} env'.format(env.python_ver))
-            run('mkdir -p logs')
-            #put('mysite/demo.sqlite3', 'mysite/production.sqlite3')
+    with cd(remote_website_dir):
+        run('virtualenv -p python{} env'.format(env.python_ver))
+        run('mkdir -p logs')
 
 def copy_project_dir():
     with cd(remote_website_dir):
