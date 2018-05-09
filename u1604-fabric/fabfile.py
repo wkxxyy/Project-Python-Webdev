@@ -47,14 +47,13 @@ def install_requirements_u1604():
     with cd(remote_website_dir):
         run('virtualenv -p python{} env'.format(env.python_ver))
         run('mkdir -p logs')
+        run('rm -rf src')
 
 def copy_project_dir():
     with cd(remote_website_dir):
-        run(r'rm -rf src && git clone {} src '
+        run(r'[ ! -d src  ] && git clone {} src '
             '|| [ false ]'.format(env.git_url))
-#         run(r'[ ! -d src  ] && git clone {} src '
-#             '|| [ false ]'.format(env.git_url))
-#         run(r'cd src && git pull && cd -')
+        run(r'cd src && git pull && cd -')
         with prefix(r'source env/bin/activate'):
             run(r'pip install -r src/requirements.txt')
             run(r'cd src/mysite && rm -rf static '
@@ -67,11 +66,10 @@ def recover_sqlite_db():
     with cd(remote_website_dir):
         run('if [ -f ./production.sqlite3.%s ]; then cp ./production.sqlite3.%s mysite/production.sqlite3; fi' % (NOW_MARK, NOW_MARK))
 
-def create_git_repo():
+def configure_db_repo():
     with cd(remote_website_dir):
-        run(r'[ ! -d ZZLARGE-DB-Account-Online ] '
-            '&& git clone https://%s:%s@github.com/%s/ZZLARGE-DB-Account-Online '
-            '|| [ false ]' % (env.git_user, env.git_password, env.git_user))
+        run(r'[ ! -d db ] && git clone {} db || [ false ]' % env.git_db_url)
+        run(r'cd db && git pull && cd -')
 
 def configure_crontab():
     with lcd(local_config_dir):
@@ -187,8 +185,8 @@ def push_deploy():
     restart_app()
 
 def _deploy():
-    #create_git_repo()
-    #configure_crontab()
+    configure_db_repo()
+    configure_crontab()
     configure_nginx()
     configure_supervisor()
     restart_app()

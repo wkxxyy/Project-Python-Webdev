@@ -1,4 +1,8 @@
-# QuickStart
+## Pre-Requirement
+- Django
+- DB?
+
+## QuickStart
 
 1. `git clone https://github.com/wu-wenxiang/Project-Python-Webdev`
 1. `cd Project-Python-Webdev/u1604-fabric`
