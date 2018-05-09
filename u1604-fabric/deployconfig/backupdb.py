@@ -23,4 +23,5 @@ cmdStr = (r'cd {webdir}/db '
           '&& git push'.format(webdir=r'''{remote_website_dir}''', 
                                passwd=r'''{db_zip_password}'''))
 
+print(cmdStr)
 os.system(cmdStr)
