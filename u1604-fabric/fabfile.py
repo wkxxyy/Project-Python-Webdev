@@ -50,9 +50,11 @@ def install_requirements_u1604():
 
 def copy_project_dir():
     with cd(remote_website_dir):
-        run(r'[ ! -d src  ] && git clone {} src '
+        run(r'rm -rf src && git clone {} src '
             '|| [ false ]'.format(env.git_url))
-        run(r'cd src && git pull && cd -')
+#         run(r'[ ! -d src  ] && git clone {} src '
+#             '|| [ false ]'.format(env.git_url))
+#         run(r'cd src && git pull && cd -')
         with prefix(r'source env/bin/activate'):
             run(r'pip install -r src/requirements.txt')
             run(r'cd src/mysite && rm -rf static '
