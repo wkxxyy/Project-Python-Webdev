@@ -18,7 +18,7 @@ cmdStr = (r'cd {webdir}/db '
           '&& cp {webdir}/src/mysite/production.sqlite3 {webdir}/db/db1 '
           '&& cd {webdir}/db '
           '&& rm -rf db.txt '
-          '&& tar -zcvf - db|openssl des3 -salt -k "{passwd}" | dd of=db.txt '
+          '&& tar -zcvf - db1|openssl des3 -salt -k "{passwd}" | dd of=db.txt '
           '&& git commit -a -m "routinely update"'
           '&& git push'.format(webdir=r'''{remote_website_dir}''', 
                                passwd=r'''{db_zip_password}'''))
