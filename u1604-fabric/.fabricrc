@@ -8,4 +8,6 @@ gunicorn_port = 8000
 python_ver = 2
 domain = test171.wenwtest.com
 git_url = https://github.com/wu-wenxiang/ZZLARGE-Project-DjangoTest
+
 git_db_url = https://user:passwd@github.com/wu-wenxiang/ZZLARGE-Project-DjangoTestDB
+git_db_passwd = 6yhn(IJN&U*

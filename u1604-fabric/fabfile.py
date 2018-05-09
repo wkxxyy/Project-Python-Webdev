@@ -96,6 +96,7 @@ def configure_crontab():
             
         confStr = open('{}/backupdb.py'.format(local_config_dir)).read()
         confStr = confStr.replace("{remote_website_dir}", remote_website_dir)
+        confStr = confStr.replace("{db_zip_password}", env.git_db_passwd)
         open('{}/.backupdb.py.tmp'.format(local_config_dir), "w").write(confStr)
         with cd(remote_website_dir):
             put('./.backupdb.py.tmp', 'tool/backupdb.py', use_sudo=True)
