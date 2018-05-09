@@ -1,6 +1,8 @@
 ## Pre-Requirement
 - Django
-- DB?
+- DB
+	- if set git_db_url, copy git_db_url/demo.sqlite3 src/mysite/production.sqlite3 
+	- else, cp src/mysite/demo.sqlite3 src/mysite/production.sqlite3
 
 ## QuickStart
 

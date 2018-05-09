@@ -23,21 +23,20 @@ NOW_MARK = '%04d%02d%02d%02d%02d%02d' % (nowDate.year, nowDate.month,
                                          nowDate.day, nowDate.hour, 
                                          nowDate.minute, nowDate.second)
 
-def install_requirements_u1604():
-    sudo('if [ -f /etc/apt/sources.list ];then cp /etc/apt/sources.list /etc/apt/sources.list.$(date +"%y%m%d%H%M%S");fi')
-    with lcd(local_config_dir):
-        with cd('/etc/apt'):
-            put('./sources.list', './', use_sudo=True)
-    sudo('apt-get update')
-    sudo('apt-get install -y python-minimal python-dev python-pip')
-    sudo('apt-get install -y python3 python3-dev python3-pip')
+def init_os(config_os):
+    sudo('if [ -f /etc/apt/sources.list ];then cp /etc/apt/sources.list '
+         '/etc/apt/sources.list.$(date +"%y%m%d%H%M%S");fi')
+
+    config_os()
+
     sudo('pip install virtualenv')
+    sudo('apt-get install -y ssh vim')
     sudo('apt-get install -y nginx')
     sudo('apt-get install -y supervisor')
     sudo('apt-get install -y git')
     sudo('apt-get install -y gettext')
-    sudo('apt-get install -y libffi-dev')
-    sudo('apt-get install -y libffi-dev libssl-dev libxml2-dev libxslt1-dev libjpeg8-dev zlib1g-dev')
+    sudo('apt-get install -y libffi-dev libssl-dev libxml2-dev libxslt1-dev '
+         'libjpeg8-dev zlib1g-dev')
 
     sudo('rm -rf {}'.format(remote_website_dir))
     sudo('mkdir -p "{}"'.format(remote_app_dir))
@@ -46,8 +45,16 @@ def install_requirements_u1604():
     sudo('chown -R {}:{} {}'.format(env.user, env.user, remote_website_dir))
     with cd(remote_website_dir):
         run('virtualenv -p python{} env'.format(env.python_ver))
-        run('mkdir -p logs')
-        run('rm -rf src')
+        run('mkdir -p logs tool')
+        run('crontab -l | grep -v "python {}" | crontab'.format(remote_website_dir))
+
+def config_u1604():
+    with lcd(local_config_dir):
+        with cd('/etc/apt'):
+            put('./sources-u1604.list', './', use_sudo=True)
+    sudo('apt-get update')
+    sudo('apt-get install -y python-minimal python-dev python-pip')
+    sudo('apt-get install -y python3 python3-dev python3-pip')    
 
 def copy_project_dir():
     with cd(remote_website_dir):
@@ -60,16 +67,24 @@ def copy_project_dir():
                 '&& python manage.py collectstatic '
                 '&& cd -')
         #run(r'cd src && python manage.py prepare_theme && cd -')
-        run(r'cp src/mysite/demo.sqlite3 src/mysite/production.sqlite3')
 
 def recover_sqlite_db():
     with cd(remote_website_dir):
-        run('if [ -f ./production.sqlite3.%s ]; then cp ./production.sqlite3.%s mysite/production.sqlite3; fi' % (NOW_MARK, NOW_MARK))
+        run('if [ -f ./production.sqlite3.%s ]; '
+            'then cp ./production.sqlite3.%s mysite/production.sqlite3; '
+            'fi' % (NOW_MARK, NOW_MARK))
 
 def configure_db_repo():
     with cd(remote_website_dir):
-        run(r'[ ! -d db ] && git clone {} db || [ false ]' % env.git_db_url)
-        run(r'cd db && git pull && cd -')
+        run(r'[ ! -d db ] && git clone {} db '
+            '|| [ false ]'.format(env.git_db_url))
+        run(r'[ -d db ] && cd db && git pull && cd - || [ false ]')
+        run(r'[ ! -d db ] '
+            '&& cp src/mysite/demo.sqlite3 src/mysite/production.sqlite3 '
+            '|| [ false ]')
+        run(r'[ -d db ] '
+            '&& cp db/demo.sqlite3 src/mysite/production.sqlite3 '
+            '|| [ false ]')
 
 def configure_crontab():
     with lcd(local_config_dir):
@@ -77,8 +92,16 @@ def configure_crontab():
         confStr = confStr.replace("{remote_website_dir}", remote_website_dir)
         open('{}/.backupdb.crontab.tmp'.format(local_config_dir), "w").write(confStr)
         with cd(remote_website_dir):
-            put('./.backupdb.crontab.tmp', './', use_sudo=True)
-    run('crontab {}/.backupdb.crontab.tmp'.format(remote_website_dir))
+            put('./.backupdb.crontab.tmp', 'tool/', use_sudo=True)
+            
+        confStr = open('{}/backupdb.py'.format(local_config_dir)).read()
+        confStr = confStr.replace("{remote_website_dir}", remote_website_dir)
+        open('{}/.backupdb.py.tmp'.format(local_config_dir), "w").write(confStr)
+        with cd(remote_website_dir):
+            put('./.backupdb.py.tmp', 'tool/backupdb.py', use_sudo=True)
+            
+    run('(crontab -l; cat {}/tool/.backupdb.crontab.tmp) '
+        '| sort | uniq | crontab'.format(remote_website_dir))
 
 def configure_nginx():
     sudo('/etc/init.d/nginx stop')
@@ -201,7 +224,7 @@ def deployRecover():
     _deploy()
 
 def init_deploy_u1604():
-    install_requirements_u1604()
+    init_os(config_u1604)
 #    install_mysql()
     deploy()
 
