@@ -1,0 +1,61 @@
+- hosts: node2
+  remote_user: root
+  vars:
+    remote_app_dir: "/home/www"
+    project_name: "AccountOnline2"
+    python_ver: 3
+    repo_url: "https://github.com/wu-wenxiang/ZZLARGE-Project-DjangoTest"
+
+  tasks:
+  - name: apt-get update
+    apt:
+      update_cache: yes
+
+  - name: install virtualenv
+    shell: pip3 install -U virtualenv
+
+  - name: install nginx
+    apt:
+      name: nginx
+      state: present
+
+  - name: install supervisor
+    apt:
+      name: supervisor
+      state: present
+
+  - name: remove website dir
+    file:
+      name: "{{remote_app_dir}}/{{project_name}}"
+      state: absent
+
+  - name: create app dir
+    file:
+      name: "{{remote_app_dir}}"
+      state: directory
+
+  - name: change mode of app dir
+    file:
+      name: "{{remote_app_dir}}"
+      mode: 777
+      recurse: yes
+
+  - name: create website dir
+    file:
+      name: "{{remote_app_dir}}/{{project_name}}"
+      state: directory
+
+  - name: change owner of website dir
+    file:
+      name: "{{remote_app_dir}}/{{project_name}}"
+      owner: root
+      group: root
+      recurse: yes
+
+  - name: set python interpreter to use
+    shell: "virtualenv -p python3 env; mkdir -p logs tool"
+    args:
+      chdir: "{{remote_app_dir}}/{{project_name}}"
+
+  - name: list crontab
+    shell: "crontab -l | grep -v 'python {{remote_app_dir}}/{{project_name}}' | crontab"
