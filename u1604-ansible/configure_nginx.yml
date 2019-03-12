@@ -4,7 +4,6 @@
     project_name: "AccountOnline2"
     remote_nginx_enable_dir: "/etc/nginx/sites-enabled"
     remote_nginx_avail_dir: "/etc/nginx/sites-available"
-    remote_supervisor_dir: "/etc/supervisor/conf.d"
     local_config_dir: "./deployconfig"
 
   tasks:
@@ -18,12 +17,12 @@
       name: "{{remote_nginx_enable_dir}}/default"
       state: absent
 
-  - name: remove nginx enable project dir
+  - name: remove nginx enable project symlink
     file:
       name: "{{remote_nginx_enable_dir}}/my_site.conf"
       state: absent
 
-  - name: remove nginx avaliable project dir
+  - name: remove nginx avaliable project config file
     file:
       name: "{{remote_nginx_avail_dir}}/my_site.conf"
       state: absent

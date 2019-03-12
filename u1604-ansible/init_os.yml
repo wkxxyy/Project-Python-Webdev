@@ -11,8 +11,8 @@
     apt:
       update_cache: yes
 
-  - name: install virtualenv
-    shell: pip3 install -U virtualenv
+  # - name: install virtualenv
+  #   shell: pip3 install -U virtualenv
 
   - name: install nginx
     apt:
@@ -52,10 +52,20 @@
       group: root
       recurse: yes
 
-  - name: set python interpreter to use
-    shell: "virtualenv -p python3 env; mkdir -p logs tool"
-    args:
-      chdir: "{{remote_app_dir}}/{{project_name}}"
+  # - name: set virtual python env
+  #   shell: "virtualenv -p python3 env"
+  #   args:
+  #     chdir: "{{remote_app_dir}}/{{project_name}}"
+
+  - name: create logs dir
+    file:
+      name: "{{remote_app_dir}}/{{project_name}}/logs"
+      state: directory
+
+  - name: create tool dir
+    file:
+      name: "{{remote_app_dir}}/{{project_name}}/tool"
+      state: directory
 
   - name: list crontab
     shell: "crontab -l | grep -v 'python {{remote_app_dir}}/{{project_name}}' | crontab"
