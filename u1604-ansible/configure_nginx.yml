@@ -1,0 +1,45 @@
+- hosts: node2
+  remote_user: root
+  vars:
+    project_name: "AccountOnline2"
+    remote_nginx_enable_dir: "/etc/nginx/sites-enabled"
+    remote_nginx_avail_dir: "/etc/nginx/sites-available"
+    remote_supervisor_dir: "/etc/supervisor/conf.d"
+    local_config_dir: "./deployconfig"
+
+  tasks:
+  - name: stop nginx
+    systemd:
+      name: nginx
+      state: stopped
+
+  - name: remove nginx enable dir
+    file:
+      name: "{{remote_nginx_enable_dir}}/default"
+      state: absent
+
+  - name: remove nginx enable project dir
+    file:
+      name: "{{remote_nginx_enable_dir}}/my_site.conf"
+      state: absent
+
+  - name: remove nginx avaliable project dir
+    file:
+      name: "{{remote_nginx_avail_dir}}/my_site.conf"
+      state: absent
+
+  - name: copy nginx config file
+    copy:
+      src: "{{local_config_dir}}/nginx.conf"
+      dest: "{{remote_nginx_avail_dir}}/my_site.conf"
+
+  - name: create symlink
+    file:
+      src: "{{remote_nginx_avail_dir}}/my_site.conf"
+      dest: "{{remote_nginx_enable_dir}}/my_site.conf"
+      state: link
+
+  - name: restart nginx
+    systemd:
+      name: nginx
+      state: restarted
