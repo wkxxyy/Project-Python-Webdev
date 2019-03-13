@@ -1,4 +1,4 @@
-- host: node2
+- hosts: node2
   remote_user: root
   vars:
     project_name: "AccountOnline2"
