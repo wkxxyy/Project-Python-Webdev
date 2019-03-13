@@ -1,6 +1,6 @@
 server {
-    listen      {{ listen_port }};
-    server_name {{ domain }};
+    listen      {{ nginx.listen_port }};
+    server_name {{ nginx.domain }};
     root        {{ remote_app_dir }}/{{ project_name }};
     access_log  {{ remote_app_dir }}/{{ project_name }}/logs/nginx.access.log;
     error_log   {{ remote_app_dir }}/{{ project_name }}/logs/nginx.error.log;

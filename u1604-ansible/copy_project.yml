@@ -2,10 +2,8 @@
 
 - hosts: node2
   remote_user: root
-  vars:
-    remote_app_dir: /home/www
-    project_name: AccountOnline2
-    repo_url: https://github.com/wu-wenxiang/ZZLARGE-Project-DjangoTest
+  vars_files:
+    - vars.yml
 
   tasks:
     - name: clone git repository
