@@ -1,33 +1,28 @@
+---
+
 - hosts: node2
   remote_user: root
   vars:
-    remote_app_dir: "/home/www"
-    project_name: "AccountOnline2"
-    repo_url: "https://github.com/wu-wenxiang/ZZLARGE-Project-DjangoTest"
+    remote_app_dir: /home/www
+    project_name: AccountOnline2
+    repo_url: https://github.com/wu-wenxiang/ZZLARGE-Project-DjangoTest
 
   tasks:
-  - name: clone git repository
-    git:
-      repo: "{{repo_url}}"
-      dest: "{{remote_app_dir}}/{{project_name}}/src"
-      clone: yes
+    - name: clone git repository
+      git: repo={{ repo_url }} dest={{ remote_app_dir }}/{{ project_name }}/src clone=yes
 
-  - name: git pull
-    shell: "git pull"
-    args:
-      chdir: "{{remote_app_dir}}/{{project_name}}/src"
+    - name: git pull
+      git: repo={{ repo_url }} dest={{ remote_app_dir }}/{{ project_name }}/src update=yes
 
-  - name: pip install requirements
-    shell: "pip3 install -r src/requirements.txt"
-    args:
-      chdir: "{{remote_app_dir}}/{{project_name}}"
+    - name: pip install requirements
+      shell: pip3 install -r requirements.txt
+      args:
+        chdir: "{{ remote_app_dir }}/{{ project_name }}/src"
 
-  - name: remove static dir
-    file:
-      name: "{{remote_app_dir}}/{{project_name}}/src/mysite/static"
-      state: absent
+    - name: remove static dir
+      file: name={{ remote_app_dir }}/{{ project_name }}/src/mysite/static state=absent
 
-  - name: exec manage.py
-    shell: "python3 manage.py collectstatic"
-    args:
-      chdir: "{{remote_app_dir}}/{{project_name}}/src/mysite"
+    - name: exec manage.py
+      shell: python3 manage.py collectstatic
+      args:
+        chdir: "{{ remote_app_dir }}/{{ project_name }}/src/mysite"
