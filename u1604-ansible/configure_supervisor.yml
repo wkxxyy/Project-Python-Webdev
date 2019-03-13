@@ -5,7 +5,9 @@
   vars:
     project_name: AccountOnline2
     remote_supervisor_dir: /etc/supervisor/conf.d
-    local_config_dir: ./deployconfig
+    remote_app_dir: /home/www
+    local_template_dir: ./templates
+    gunicorn_port: 8000
 
   tasks:
     - name: stop project
@@ -14,8 +16,11 @@
     - name: remove config file
       file: name={{ remote_supervisor_dir }}/{{ project_name }}.conf state=absent
 
-    - name: copy supervisor config file
-      copy: src={{ local_config_dir }}/supervisor.conf dest={{ remote_supervisor_dir }}/{{ project_name }}.conf
+    # - name: copy supervisor config file
+    #   copy: src={{ local_config_dir }}/supervisor.conf dest={{ remote_supervisor_dir }}/{{ project_name }}.conf
+
+    - name: generate supervisor project config file
+      template: src={{ local_template_dir }}/supervisor.conf.j2 dest={{ remote_supervisor_dir }}/{{ project_name }}.conf
 
     - name: supervisorctl update
       supervisorctl: name={{ project_name }} state=restarted
