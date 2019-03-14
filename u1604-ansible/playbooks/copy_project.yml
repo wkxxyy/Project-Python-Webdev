@@ -1,0 +1,26 @@
+---
+
+- hosts: node2
+  remote_user: root
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: clone git repository
+      git: repo={{ repo_url }} dest={{ remote_app_dir }}/{{ project_name }}/src clone=yes
+
+    - name: git pull
+      git: repo={{ repo_url }} dest={{ remote_app_dir }}/{{ project_name }}/src update=yes
+
+    - name: pip install requirements
+      shell: pip3 install -r requirements.txt
+      args:
+        chdir: "{{ remote_app_dir }}/{{ project_name }}/src"
+
+    - name: remove static dir
+      file: name={{ remote_app_dir }}/{{ project_name }}/src/mysite/static state=absent
+
+    - name: exec manage.py
+      shell: python3 manage.py collectstatic
+      args:
+        chdir: "{{ remote_app_dir }}/{{ project_name }}/src/mysite"

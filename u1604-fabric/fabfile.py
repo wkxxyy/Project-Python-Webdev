@@ -20,7 +20,7 @@ remote_supervisor_dir = '/etc/supervisor/conf.d'
 
 nowDate = datetime.datetime.now()
 NOW_MARK = '%04d%02d%02d%02d%02d%02d' % (nowDate.year, nowDate.month,
-                                         nowDate.day, nowDate.hour, 
+                                         nowDate.day, nowDate.hour,
                                          nowDate.minute, nowDate.second)
 
 def init_os(config_os):
@@ -54,7 +54,7 @@ def config_u1604():
             put('./sources-u1604.list', './', use_sudo=True)
     sudo('apt-get update')
     sudo('apt-get install -y python-minimal python-dev python-pip')
-    sudo('apt-get install -y python3 python3-dev python3-pip')    
+    sudo('apt-get install -y python3 python3-dev python3-pip')
 
 def copy_project_dir():
     with cd(remote_website_dir):
@@ -93,14 +93,14 @@ def configure_crontab():
         open('{}/.backupdb.crontab.tmp'.format(local_config_dir), "w").write(confStr)
         with cd(remote_website_dir):
             put('./.backupdb.crontab.tmp', 'tool/', use_sudo=True)
-            
+
         confStr = open('{}/backupdb.py'.format(local_config_dir)).read()
         confStr = confStr.replace("{remote_website_dir}", remote_website_dir)
         confStr = confStr.replace("{db_zip_password}", env.git_db_passwd)
         open('{}/.backupdb.py.tmp'.format(local_config_dir), "w").write(confStr)
         with cd(remote_website_dir):
             put('./.backupdb.py.tmp', 'tool/backupdb.py', use_sudo=True)
-            
+
     run('(crontab -l; cat {}/tool/.backupdb.crontab.tmp) '
         '| sort | uniq | crontab'.format(remote_website_dir))
 
@@ -228,4 +228,3 @@ def init_deploy_u1604():
     init_os(config_u1604)
 #    install_mysql()
     deploy()
-

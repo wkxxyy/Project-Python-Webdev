@@ -1,6 +1,3 @@
----
-# vars file for server
-
 project_name: AccountOnline2
 remote_app_dir: /home/www
 repo_url: https://github.com/wu-wenxiang/ZZLARGE-Project-DjangoTest

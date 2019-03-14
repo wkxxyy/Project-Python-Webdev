@@ -1,0 +1,22 @@
+---
+
+- hosts: node2
+  remote_user: root
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: stop project
+      supervisorctl: name={{ project_name }} state=stopped
+
+    - name: remove config file
+      file: name={{ supervisor.remote_supervisor_dir }}/{{ project_name }}.conf state=absent
+
+    # - name: copy supervisor config file
+    #   copy: src={{ local_config_dir }}/supervisor.conf dest={{ supervisor.remote_supervisor_dir }}/{{ project_name }}.conf
+
+    - name: generate supervisor project config file
+      template: src={{ local_template_dir }}/supervisor.conf.j2 dest={{ supervisor.remote_supervisor_dir }}/{{ project_name }}.conf
+
+    - name: supervisorctl update
+      supervisorctl: name={{ project_name }} state=restarted

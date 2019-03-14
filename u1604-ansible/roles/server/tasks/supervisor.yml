@@ -1,0 +1,14 @@
+---
+# tasks file for server
+
+- name: stop project
+  supervisorctl: name={{ project_name }} state=stopped
+
+- name: remove config file
+  file: name={{ supervisor.remote_supervisor_dir }}/{{ project_name }}.conf state=absent
+
+- name: generate supervisor project config file
+  template: src=supervisor.conf.j2 dest={{ supervisor.remote_supervisor_dir }}/{{ project_name }}.conf
+
+- name: supervisorctl update
+  supervisorctl: name={{ project_name }} state=restarted

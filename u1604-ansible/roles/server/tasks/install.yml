@@ -1,0 +1,9 @@
+---
+# tasks file for server
+
+- name: Install packages
+  apt: pkg={{ item }} state=present
+  with_items:
+    - nginx
+    - supervisor
+  sudo: yes
