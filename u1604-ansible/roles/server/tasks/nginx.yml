@@ -1,0 +1,20 @@
+---
+# tasks file for server
+
+- name: stop nginx
+  systemd: name=nginx state=stopped
+
+- name: remove nginx enable project symlink
+  file: name={{ nginx.remote_nginx_enable_dir }}/my_site.conf state=absent
+
+- name: remove nginx avaliable project config file
+  file: name={{ nginx.remote_nginx_avail_dir }}/my_site.conf state=absent
+
+- name: generate nginx project config file
+  template: src=nginx.conf.j2 dest={{ nginx.remote_nginx_avail_dir }}/my_site.conf
+
+- name: create symlink
+  file: src={{ nginx.remote_nginx_avail_dir }}/my_site.conf dest={{ nginx.remote_nginx_enable_dir }}/my_site.conf state=link
+
+- name: restart nginx
+  systemd: name=nginx state=restarted

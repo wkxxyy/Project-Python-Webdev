@@ -1,0 +1,30 @@
+server {
+    listen      {{ nginx.listen_port }};
+    server_name {{ nginx.domain }};
+    root        {{ remote_app_dir }}/{{ project_name }};
+    access_log  {{ remote_app_dir }}/{{ project_name }}/logs/nginx.access.log;
+    error_log   {{ remote_app_dir }}/{{ project_name }}/logs/nginx.error.log;
+
+    # 处理静态文件/favicon.ico:
+    location /favicon.ico {
+        root {{ remote_app_dir }}/{{ project_name }}/src/mysite;
+    }
+
+    # 处理静态资源:
+    location ~ ^\/static\/.*$ {
+        root {{ remote_app_dir }}/{{ project_name }}/src/mysite;
+    }
+    location ~ ^\/front\/.*$ {
+        root {{ remote_app_dir }}/{{ project_name }}/src;
+    }
+    location ~ ^\/example\/.*$ {
+        root {{ remote_app_dir }}/{{ project_name }}/src;
+    }
+
+    location / {
+        proxy_pass       http://localhost:{{ gunicorn_port }};
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
