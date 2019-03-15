@@ -1,7 +1,7 @@
 FROM frolvlad/alpine-python3
 
 RUN apk update && \
-    apk add --no-cache bash git openssh nginx build-base python3-dev zlib-dev py-pip jpeg-dev supervisor openrc
+    apk add --no-cache bash git nginx build-base python3-dev zlib-dev jpeg-dev supervisor openrc
 RUN mkdir /home/www && \
     mkdir /home/www/AccountOnline2 && \
     mkdir /home/www/AccountOnline2/logs && \
