@@ -2,7 +2,7 @@
 # tasks file for server
 
 - name: stop project
-  supervisorctl: name={{ project_name }} state=stopped
+  supervisorctl: name={{ project_name }} state=absent
 
 - name: remove config file
   file: name={{ supervisor.remote_supervisor_dir }}/{{ project_name }}.conf state=absent

@@ -7,3 +7,5 @@
     - include: roles/server/tasks/deploy.yml
     - include: roles/server/tasks/supervisor.yml
     - include: roles/server/tasks/nginx.yml
+  remote_user: root
+  sudo: True
