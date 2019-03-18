@@ -1,6 +1,8 @@
 ---
 
 - hosts: node2
+  roles:
+  - server
   tasks:
     - include: roles/server/tasks/update.yml
     - include: roles/server/tasks/init.yml
