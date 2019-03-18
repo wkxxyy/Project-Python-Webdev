@@ -9,6 +9,6 @@
 ### QuickStart
 
 ```bash
-$ cd alpine-docker
+$ cd python-docker
 $ docker build -t image_name:tag .
 ```
