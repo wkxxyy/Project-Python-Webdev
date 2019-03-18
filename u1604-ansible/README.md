@@ -9,16 +9,25 @@
 ## QuickStart
 
 ```bash
-cd u1604-ansible
+$ cd u1604-ansible
+```
+
+## Set your Ansible config
+
+file path: /etc/ansible/hosts
+
+```conf
+[node2] # servers group name
+ip_addr # server ip
 ```
 
 ### One step to deploy
 
 1. `ansible-playbook ./site.yml`
 
-### play step by step
+### Play step by step
 
-1. init `ansible-playbook ./init_os.yml`
-2. deploy project `ansible-playbook ./copy_project.yml`
-3. configure supervisor `ansible ./configure_supervisor.yml`
-4. configure nginx `ansible ./configure_nginx.yml`
+1. init `ansible-playbook ./playbooks/init_os.yml`
+2. deploy project `ansible-playbook ./playbooks/copy_project.yml`
+3. configure supervisor `ansible ./playbooks/configure_supervisor.yml`
+4. configure nginx `ansible ./playbooks/configure_nginx.yml`
