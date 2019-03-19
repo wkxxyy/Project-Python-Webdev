@@ -2,6 +2,10 @@
 # tasks file for server
 
 - name: stop project
+  supervisorctl: name={{ project_name }} state=stopped
+  ignore_errors: True
+
+- name: remove project
   supervisorctl: name={{ project_name }} state=absent
 
 - name: remove config file
