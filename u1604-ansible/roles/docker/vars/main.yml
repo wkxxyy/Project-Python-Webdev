@@ -1,0 +1,8 @@
+---
+# vars file for docker
+
+ansible_distribution_release: bionic
+remote_proj_dir: /home/docker
+api_container_name: webdev_api
+nginx_container_name: webdev_nginx
+base_container_name: webdev_base

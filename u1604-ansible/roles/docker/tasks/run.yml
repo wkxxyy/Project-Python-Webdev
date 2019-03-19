@@ -1,0 +1,8 @@
+---
+# tasks file for docker
+
+- name: Run Docker API container
+  docker_container: name=api image={{ api_container_name }}:latest ports=8000:8000 detach=yes
+
+- name: Run Docker nginx container
+  docker_container: name=nginx image={{ nginx_container_name }}:latest ports=80:80 detach=yes network_mode=host

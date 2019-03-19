@@ -1,0 +1,11 @@
+---
+# tasks file for docker
+
+- name: Build base image
+  docker_image: path={{ remote_proj_dir }}/base name={{ base_container_name }} pull=no
+
+- name: Build Docker image
+  docker_image: path={{ remote_proj_dir }}/api name={{ api_container_name }} pull=no
+
+- name: Build Docker image
+  docker_image: path={{ remote_proj_dir }}/nginx name={{ nginx_container_name }} pull=no
