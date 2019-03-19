@@ -2,4 +2,4 @@
 # tasks file for docker
 
 - name: Pull image
-  docker_image: name=python:3.6.8
+  docker_image: name=python:3.6.8 pull=yes
