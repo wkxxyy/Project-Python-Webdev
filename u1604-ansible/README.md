@@ -5,6 +5,7 @@
 ## Pre-Requirement
 
 - Python3
+- Ubuntu 18.04 (Ubuntu 16.04)
 
 ## QuickStart
 

@@ -4,6 +4,7 @@
   tasks:
     - include: roles/server/tasks/update.yml
     - include: roles/server/tasks/init.yml
+    - include: roles/server/tasks/install.yml
     - include: roles/server/tasks/deploy.yml
     - include: roles/server/tasks/supervisor.yml
     - include: roles/server/tasks/nginx.yml
