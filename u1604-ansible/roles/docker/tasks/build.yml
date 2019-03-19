@@ -1,0 +1,8 @@
+---
+# tasks file for docker
+
+- name: Build Docker image
+  docker_image: path={{ remote_proj_dir }}/api name=webdev_api
+
+- name: Build Docker image
+  docker_image: path={{ remote_proj_dir }}/static name=webdev_nginx

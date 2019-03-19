@@ -1,0 +1,23 @@
+---
+# tasks file for docker
+
+- name: Create project dir
+  file: name={{ remote_proj_dir }} state=directory
+
+- name: Create API dir
+  file: name={{ remote_proj_dir }}/api state=directory
+
+- name: Copy Dockerfile
+  copy: src=files/api/Dockerfile dest={{ remote_proj_dir }}/api/Dockerfile
+
+- name: Create static dir
+  file: name={{ remote_proj_dir }}/static state=directory
+
+- name: Copy Dockerfile
+  copy: src=files/static/Dockerfile dest={{ remote_proj_dir }}/static/Dockerfile
+
+- name: Create config file dir
+  file: name={{ remote_proj_dir }}/static/deployconfig state=directory
+
+- name: Copy nginx config file
+  copy: src=files/nginx.conf dest={{ remote_proj_dir }}/static/deployconfig/nginx.conf
