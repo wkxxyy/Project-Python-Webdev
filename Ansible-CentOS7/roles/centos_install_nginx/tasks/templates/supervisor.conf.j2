@@ -1,0 +1,11 @@
+[program:{{ project_name }}]
+command   = gunicorn --bind localhost:{{ gunicorn_port }} --workers 5 --worker-class gevent mysite.wsgi:application
+directory = {{ remote_app_dir }}/{{ project_name }}/src/mysite
+user      = root
+
+startsecs = 3
+
+redirect_stderr         = true
+stdout_logfile_maxbytes = 50MB
+stdout_logfile_backups  = 10
+stdout_logfile          = {{ remote_app_dir }}/{{ project_name }}/logs/supervisor.log

@@ -1,0 +1,5 @@
+---
+- name: restart_app
+  shell: supervisorctl restart {{ project_name }}
+  args:
+    chdir: "{{ remote_app_dir }}/{{ project_name }}"

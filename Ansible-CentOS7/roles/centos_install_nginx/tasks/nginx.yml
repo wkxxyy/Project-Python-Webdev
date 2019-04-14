@@ -1,0 +1,47 @@
+---
+- name: stop nginx
+  systemd: name=nginx state=stopped
+
+- name: remove nginx enable project symlink
+  file: name={{ nginx.remote_nginx_enable_dir }}/default state=absent
+
+- name: remove nginx avaliable project config file
+  file: name={{ nginx.remote_nginx_avail_dir }}/* state=absent
+
+- name: create nginx_enable_dir
+  file: name={{ nginx.remote_nginx_enable_dir }} state=directory
+
+- name: create nginx_avail_dir
+  file: name={{ nginx.remote_nginx_avail_dir }} state=directory
+
+- name: generate nginx project config file
+  template: src=nginx.conf.tmp dest={{ nginx.remote_nginx_avail_dir }}/{{ project_name }}
+
+- name: generate nginx project config file
+  template: src=nginx.conf.tmp dest=/etc/nginx/conf.d/{{ project_name }}.conf
+
+- name: create symlink
+  file: src={{ nginx.remote_nginx_avail_dir }}/{{ project_name }} dest={{ nginx.remote_nginx_enable_dir }}/{{ project_name }} state=link
+
+
+- name: generate nginx base config file
+  template: src=nginx-base.conf dest=/etc/nginx/nginx.conf
+
+- name: copy db
+  shell: cp src/mysite/demo.sqlite3 src/mysite/production.sqlite3
+  args:
+    chdir: "{{ remote_app_dir }}/{{ project_name }}"
+
+- name: restart nginx
+  shell: nginx -c /etc/nginx/nginx.conf
+  ignore_errors: True
+
+- name: restart nginx
+  shell: nginx -s reload
+  ignore_errors: True
+
+- name: enable nginx  bootup
+  systemd: name=nginx enabled=yes
+
+- name: change selinx config file
+  template: src=selinux-config dest=/etc/selinux/config

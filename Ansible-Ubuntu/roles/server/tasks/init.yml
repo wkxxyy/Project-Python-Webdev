@@ -1,0 +1,23 @@
+---
+# tasks file for server
+
+- name: remove website dir
+  file: name={{ remote_app_dir }}/{{ project_name }} state=absent
+
+- name: create app dir
+  file: name={{ remote_app_dir }} state=directory
+
+- name: change mode of app dir
+  file: name={{ remote_app_dir }} mode=777 recurse=yes
+
+- name: create website dir
+  file: name={{ remote_app_dir }}/{{ project_name }} state=directory
+
+- name: change mode of web dir
+  shell: chown -R root:root /home/www/AccountOnline2
+
+- name: create logs dir
+  file: name={{ remote_app_dir }}/{{ project_name }}/logs state=directory
+
+- name: create tool dir
+  file: name={{ remote_app_dir }}/{{ project_name }}/tool state=directory

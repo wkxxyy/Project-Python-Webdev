@@ -1,0 +1,16 @@
+---
+
+- hosts: ansible
+  roles:
+  - server
+  tasks:
+    - include: roles/server/tasks/update.yml
+    - include: roles/server/tasks/install.yml
+    - include: roles/server/tasks/init.yml
+    - include: roles/server/tasks/deploy.yml
+    - include: roles/server/tasks/crontab.yml
+    - include: roles/server/tasks/nginx.yml
+    - include: roles/server/tasks/supervisor.yml
+    - include: roles/server/tasks/restart.yml
+  remote_user: root
+  sudo: True

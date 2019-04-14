@@ -1,0 +1,16 @@
+---
+- name: backup repo
+  shell: cp /etc/yum.repos.d/CentOS-Base.repo /etc/yum.repos.d/CentOS-Base.repo_bak
+  ignore_errors: yes
+
+- name: download aliyun_repo_file
+  shell: wget -O /etc/yum.repos.d/CentOS-Base.repo {{ aliyun_repo_url }} 
+
+- name: install EPEL
+  yum:
+     name: epel-release 
+     state: latest
+
+- name: updates_cache
+  yum: name=* update_cache=yes
+

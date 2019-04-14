@@ -1,0 +1,12 @@
+---
+- name: install basic package for nginx
+  yum: name={{ item }} state=latest
+  with_items:
+    - git
+    - python-pip
+    - python36
+    - python36-pip
+    - python36-setuptools
+    - nginx
+    - supervisor
+  sudo: yes

@@ -1,0 +1,6 @@
+{
+  "registry-mirrors": ["https://c7qv7nsm.mirror.aliyuncs.com"],
+  "insecure-registries":["192.168.9.131:5000"],
+  "insecure-registries":["192.168.9.131"]
+}
+}

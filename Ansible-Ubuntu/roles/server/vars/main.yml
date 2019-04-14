@@ -1,0 +1,21 @@
+---
+# vars file for server
+hosts: 192.168.0.105
+user: root
+password: 1
+project_name: AccountOnline2
+remote_app_dir: /home/www
+repo_url: https://github.com/wu-wenxiang/ZZLARGE-Project-DjangoTest
+local_template_dir: ./templates
+gunicorn_port: 8000
+nginx:
+  remote_nginx_enable_dir: /etc/nginx/sites-enabled
+  remote_nginx_avail_dir: /etc/nginx/sites-available
+  listen_port: 80
+  domain: node14.test.com
+supervisor:
+  remote_supervisor_dir: /etc/supervisor/conf.d
+python_ver: 2
+domain: test171.wenwtest.com
+git_db_passwd: 6yhn(IJN&U*
+

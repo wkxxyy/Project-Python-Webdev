@@ -1,0 +1,24 @@
+---
+# tasks file for server
+
+- name: stop project
+  supervisorctl: name={{ project_name }} state=stopped
+  ignore_errors: True
+
+- name: remove project
+  supervisorctl: name={{ project_name }} state=absent
+
+- name: remove config file
+  file: name={{ supervisor.remote_supervisor_dir }}/{{ project_name }}.conf state=absent
+
+- name: generate supervisor project config file
+  template: src=supervisor.conf-ansible.tmp dest={{ supervisor.remote_supervisor_dir }}/{{ project_name }}.conf
+
+- name: reread superctl
+  shell: supervisorctl reread
+
+- name: update superctl
+  shell: supervisorctl update
+
+- name: supervisorctl update
+  supervisorctl: name={{ project_name }} state=restarted

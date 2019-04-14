@@ -1,0 +1,29 @@
+---
+- name: stop project
+  supervisorctl: name={{ project_name }} state=stopped
+  ignore_errors: True
+
+- name: remove project
+  supervisorctl: name={{ project_name }} state=absent
+
+- name: remove config file
+  file: name={{ supervisor.remote_supervisor_dir }}/{{ project_name }}.conf state=absent
+  ignore_errors: True
+
+- name: generate supervisor project config file
+  template: src=supervisor.conf.j2 dest={{ supervisor.remote_supervisor_dir }}/{{ project_name }}.conf
+
+
+- name: generate supervisor project ini file
+  template: src=supervisor.conf.j2 dest={{ supervisor.remote_supervisor_dir }}/{{ project_name }}.ini
+
+- name: input_conf
+  shell: supervisord -c {{ supervisor.remote_supervisor_default_conf }}
+  ignore_errors: True
+
+- name: supervisorctl update
+  supervisorctl: name={{ project_name }} state=started
+  ignore_errors: True
+
+- name: enable supervisord bootup
+  systemd: name=supervisord enabled=yes

@@ -1,0 +1,26 @@
+---
+# tasks file for docker
+
+#- name: Build base image
+#  docker_image: path={{ remote_proj_dir }}/base name={{ base_container_name }} pull=no
+
+#- name: Build Docker image
+#  docker_image: path={{ remote_proj_dir }}/api name={{ api_container_name }} pull=no
+
+#- name: Build Docker image
+#  docker_image: path={{ remote_proj_dir }}/nginx name={{ nginx_container_name }} pull=no
+
+- name: build base image
+  shell: docker build -t {{ base_container_name }} ./
+  args:
+    chdir: "{{ remote_proj_dir }}/base"
+
+- name: build docker image
+  shell: docker build -t {{ api_container_name }} ./
+  args:
+    chdir: "{{ remote_proj_dir }}/api"
+
+- name: build base image
+  shell: docker build -t {{ nginx_container_name }} ./
+  args:
+    chdir: "{{ remote_proj_dir }}/nginx"

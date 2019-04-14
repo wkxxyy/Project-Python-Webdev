@@ -1,0 +1,9 @@
+---
+- name: generate crontab file
+  template: src=.backupdb.crontab.tmp dest={{ remote_app_dir  }}/{{ project_name }}/tool
+
+- name: generate db file
+  template: src=backupdb.py.tmp dest={{ remote_app_dir  }}/{{ project_name }}/tool/backupdb.py
+
+- name: init crontab
+  shell: crontab -l; cat /home/www/AccountOnline2/tool/.backupdb.crontab.tmp | sort | uniq | crontab

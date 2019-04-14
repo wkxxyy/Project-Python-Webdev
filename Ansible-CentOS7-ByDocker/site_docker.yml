@@ -1,0 +1,14 @@
+---
+
+- hosts: docker
+  roles:
+  - docker
+  tasks:
+    - include: roles/docker/tasks/update.yml
+    - include: roles/docker/tasks/install.yml
+    - include: roles/docker/tasks/pull.yml
+    - include: roles/docker/tasks/copy.yml
+    - include: roles/docker/tasks/build.yml
+    - include: roles/docker/tasks/run.yml
+  remote_user: root
+  sudo: True

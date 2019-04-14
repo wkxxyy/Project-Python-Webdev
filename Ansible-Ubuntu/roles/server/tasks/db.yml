@@ -1,0 +1,5 @@
+---
+- name: copy db
+  shell: cp src/mysite/demo.sqlite3 src/mysite/production.sqlite3
+  args:
+    chdir: "{{ remote_app_dir }}/{{ project_name }}"

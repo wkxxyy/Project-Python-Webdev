@@ -1,0 +1,14 @@
+FROM {{ base_container_name }}
+
+RUN rm -rf /etc/nginx/sites-available/*
+RUN rm -rf /etc/nginx/sites-enabled/*
+RUN rm -rf /etc/nginx/conf.d/*
+
+ADD ./deployconfig/nginx.conf /etc/nginx/nginx.conf
+ADD ./deployconfig/AccountOnline2.conf /etc/nginx/conf.d/AccountOnline2.conf
+ADD ./deployconfig/AccountOnline2.conf /etc/nginx/sites-available/AccountOnline2
+
+RUN ln -s /etc/nginx/sites-available/AccountOnline2 /etc/nginx/sites-enabled/AccountOnline2
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

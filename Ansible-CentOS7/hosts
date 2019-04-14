@@ -1,0 +1,2 @@
+[centos_nginx]
+192.168.0.106 ansible_ssh_user=root ansible_ssh_pass='wg199489'
